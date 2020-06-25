@@ -24,37 +24,37 @@ export class CategoryService {
 
   create(category: Category): Observable<Category> {
     return this.http.post(this.apiPath, category, httpOptions)
-    .pipe(
-      catchError(this.handleError)
-    )
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   getAll(): Observable<Category[]> {
     return this.http.get<Category[]>(this.apiPath, httpOptions)
-    .pipe(
-      catchError(this.handleError)
-    )
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   getById(id: number): Observable<Category> {
     return this.http.get<Category>(`${this.apiPath}/${id}`, httpOptions)
-    .pipe(
-      catchError(this.handleError)
-    )
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   update(category: Category): Observable<Category> {
     return this.http.put<Category>(`${this.apiPath}/${category.id}`, category, httpOptions)
-    .pipe(
-      catchError(this.handleError)
-    )
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   delete(id: number): Observable<any> {
     return this.http.delete(`${this.apiPath}/${id}`, httpOptions)
-    .pipe(
-      catchError(this.handleError)
-    )
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   private handleError(error: any): Observable<any> {
