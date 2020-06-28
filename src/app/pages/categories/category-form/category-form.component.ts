@@ -16,7 +16,7 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   isEdit = false;
   categoryForm: FormGroup;
   pageTitle: string;
-  serverErrorMessage: string[] = null;
+  serverErrorMessages: string[] = null;
   submittingForm = false;
   category: Category = new Category();
 
@@ -44,7 +44,8 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
 
   private createCategory() {
     const category = Object.assign(new Category(), this.categoryForm.value);
-    this.categoryService.create(category).subscribe(catcategory => this.actionsForsuccess(category));
+    this.categoryService.create(category).subscribe(catcategory => this.actionsForsuccess(category),
+    error => this.actionsForError(error));
   }
 
   private actionsForsuccess(category: Category): void {
@@ -53,9 +54,20 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
       .then(() => this.router.navigate(['categories', category.id, 'edit']));
   }
 
+  private actionsForError(error): void {
+    toastr.error('Ocorreu um erro ao processar sua solicitação.');
+    this.submittingForm = false;
+    if (error.status === 422) {
+      this.serverErrorMessages = JSON.parse(error._body).errors;
+    } else {
+      this.serverErrorMessages = ['Falha na comunicação com o servidor'];
+    }
+  }
+
   private updateCategory() {
     const category = Object.assign(new Category(), this.categoryForm.value);
-    this.categoryService.update(category).subscribe(cat => this.actionsForsuccess(category));
+    this.categoryService.update(category).subscribe(cat => this.actionsForsuccess(category),
+    error => this.actionsForError(error));
   }
 
   ngAfterContentChecked() {
@@ -83,14 +95,14 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     });
   }
 
-  loadCategory() {
+  private loadCategory() {
     if (this.isEdit) {
       this.route.paramMap.pipe(
         switchMap(params => this.categoryService.getById(+params.get('id')))
       ).subscribe(category => {
         this.category = category;
         this.categoryForm.patchValue(category);
-      });
+      }, error => this.actionsForError(error));
     }
   }
 }
