@@ -4,6 +4,7 @@ import { Category } from 'src/app/model/category.model';
 import { CategoryService } from 'src/app/core/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import toastr from 'toastr';
 
 @Component({
   selector: 'app-category-form',
@@ -33,7 +34,28 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   }
 
   ngSubmit() {
-    
+    this.submittingForm = true;
+    if (this.isEdit) {
+      this.updateCategory();
+    } else {
+      this.createCategory();
+    }
+  }
+
+  private createCategory() {
+    const category = Object.assign(new Category(), this.categoryForm.value);
+    this.categoryService.create(category).subscribe(catcategory => this.actionsForsuccess(category));
+  }
+
+  private actionsForsuccess(category: Category): void {
+    toastr.success('Solicitação Processada com sucesso');
+    this.router.navigateByUrl('categories', { skipLocationChange: true })
+      .then(() => this.router.navigate(['categories', category.id, 'edit']));
+  }
+
+  private updateCategory() {
+    const category = Object.assign(new Category(), this.categoryForm.value);
+    this.categoryService.update(category).subscribe(cat => this.actionsForsuccess(category));
   }
 
   ngAfterContentChecked() {
