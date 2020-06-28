@@ -1,10 +1,11 @@
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Category } from 'src/app/model/category.model';
-import { CategoryService } from 'src/app/core/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import toastr from 'toastr';
+
+import { Category } from 'src/app/model/category.model';
+import { CategoryService } from 'src/app/core/services/category.service';
 
 @Component({
   selector: 'app-category-form',

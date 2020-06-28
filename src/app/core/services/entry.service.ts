@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
-import { Category } from '../model/category.model';
+import { environment } from '../../../environments/environment';
+import { Entry } from '../../model/entry.model';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -15,36 +15,36 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
+export class EntryService {
 
-  private apiPath = `${environment.url}/categories`;
+  private apiPath = `${environment.url}/entries`;
   constructor(
     private http: HttpClient
   ) { }
 
-  create(category: Category): Observable<Category> {
-    return this.http.post(this.apiPath, category, httpOptions)
+  create(entry: Entry): Observable<Entry> {
+    return this.http.post(this.apiPath, entry, httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  getAll(): Observable<Category[]> {
-    return this.http.get<Category[]>(this.apiPath, httpOptions)
+  getAll(): Observable<Entry[]> {
+    return this.http.get<Entry[]>(this.apiPath, httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  getById(id: number): Observable<Category> {
-    return this.http.get<Category>(`${this.apiPath}/${id}`, httpOptions)
+  getById(id: number): Observable<Entry> {
+    return this.http.get<Entry>(`${this.apiPath}/${id}`, httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  update(category: Category): Observable<Category> {
-    return this.http.put<Category>(`${this.apiPath}/${category.id}`, category, httpOptions)
+  update(entry: Entry): Observable<Entry> {
+    return this.http.put<Entry>(`${this.apiPath}/${entry.id}`, entry, httpOptions)
       .pipe(
         catchError(this.handleError)
       );
